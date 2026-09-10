@@ -71,7 +71,7 @@ web = [
     "pypdf>=4.0.0,<5",
 ]
 watch = [
-    "watchdog>=4.0.0,<5",
+    "watchdog>=4.0.0,<7",
 ]
 dev = [
     "black>=24.3.0",
@@ -98,7 +98,7 @@ all = [
     "apscheduler>=3.10.0,<4",
     "beautifulsoup4>=4.12.0,<5",
     "pypdf>=4.0.0,<5",
-    "watchdog>=4.0.0,<5",
+    "watchdog>=4.0.0,<7",
 ]
 
 [project.scripts]
