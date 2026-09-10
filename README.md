@@ -378,3 +378,7 @@ make security     # bandit scan
   <br>
   <sub>Designed for engineers. Built for the terminal.</sub>
 </p>
+
+## 🤝 Contributors
+
+- [neoastra303](https://github.com/neoastra303) - Lead Developer
