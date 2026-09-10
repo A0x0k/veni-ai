@@ -61,7 +61,7 @@ dashboard = [
     "jinja2>=3.1.0,<4",
 ]
 telegram = [
-    "python-telegram-bot>=21.0,<22",
+    "python-telegram-bot>=21.0,<23",
 ]
 scheduler = [
     "apscheduler>=3.10.0,<4",
@@ -94,7 +94,7 @@ all = [
     "fastapi>=0.110.0,<1",
     "uvicorn>=0.27.0,<1",
     "jinja2>=3.1.0,<4",
-    "python-telegram-bot>=21.0,<22",
+    "python-telegram-bot>=21.0,<23",
     "apscheduler>=3.10.0,<4",
     "beautifulsoup4>=4.12.0,<5",
     "pypdf>=4.0.0,<5",
