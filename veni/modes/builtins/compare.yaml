@@ -1,0 +1,7 @@
+name: "Compare"
+description: "Side-by-side analysis, trade-offs, decision matrices"
+system_prompt_addition: "Always present comparisons in a structured format. Use tables when possible. Cover pros, cons, trade-offs, and decision criteria. Be fair to all options. Include a recommendation with clear reasoning."
+max_response_length: null
+response_style: "comparative"
+best_for: ["vs", "versus", "compare", "which is better", "pros and cons", "difference between"]
+icon: "⚖️"

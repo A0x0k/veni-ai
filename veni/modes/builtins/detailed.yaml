@@ -1,0 +1,7 @@
+name: "Detailed"
+description: "Thorough explanations, examples, context, and edge cases"
+system_prompt_addition: "Be thorough and comprehensive. Include examples, context, and edge cases. Explain the 'why' behind everything. Cover alternative perspectives. Anticipate follow-up questions and address them proactively."
+max_response_length: null
+response_style: "comprehensive"
+best_for: ["explain in detail", "deep dive", "comprehensive", "everything about", "full guide"]
+icon: "📖"

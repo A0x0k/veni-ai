@@ -1,0 +1,175 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "veni-ai"
+version = "1.2.0"
+description = "Terminal-native AI assistant with multi-provider support, rich UI, and project-aware tooling."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "neoastra303", email = "neoastra303@example.com" }
+]
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "rich>=13.0.0,<14",
+    "typer>=0.9.0,<1",
+    "requests>=2.28.0,<3",
+    "python-dotenv>=1.0.0,<2",
+    "pyyaml>=6.0,<7",
+    "pyperclip>=1.8.0,<2",
+    "ddgs>=9.0.0,<10",
+    "prompt_toolkit>=3.0.0,<4",
+    "tiktoken>=0.7.0,<1",
+]
+
+[project.urls]
+Homepage = "https://github.com/neoastra303/Veni-AI"
+Repository = "https://github.com/neoastra303/Veni-AI"
+Issues = "https://github.com/neoastra303/Veni-AI/issues"
+Changelog = "https://github.com/neoastra303/Veni-AI/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+voice = [
+    "pyaudio>=0.2.13",
+    "SpeechRecognition>=3.10.0,<4",
+    "pyttsx3>=2.90,<3",
+]
+browser = [
+    "playwright>=1.40.0,<2",
+]
+memory = [
+    "chromadb>=0.5.0,<1",
+    "sentence-transformers>=3.0.0,<4",
+    "tf-keras>=2.16.0,<3",
+]
+dashboard = [
+    "fastapi>=0.110.0,<1",
+    "uvicorn>=0.27.0,<1",
+    "jinja2>=3.1.0,<4",
+]
+telegram = [
+    "python-telegram-bot>=21.0,<22",
+]
+scheduler = [
+    "apscheduler>=3.10.0,<4",
+]
+web = [
+    "beautifulsoup4>=4.12.0,<5",
+    "pypdf>=4.0.0,<5",
+]
+watch = [
+    "watchdog>=4.0.0,<5",
+]
+dev = [
+    "black>=24.3.0",
+    "ruff>=0.0.300",
+    "mypy>=1.10.0",
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+    "bandit>=1.7.0",
+    "safety>=3.0.0",
+    "pre-commit>=3.0.0",
+]
+all = [
+    "pyaudio>=0.2.13",
+    "SpeechRecognition>=3.10.0,<4",
+    "pyttsx3>=2.90,<3",
+    "playwright>=1.40.0,<2",
+    "chromadb>=0.5.0,<1",
+    "sentence-transformers>=3.0.0,<4",
+    "tf-keras>=2.16.0,<3",
+    "fastapi>=0.110.0,<1",
+    "uvicorn>=0.27.0,<1",
+    "jinja2>=3.1.0,<4",
+    "python-telegram-bot>=21.0,<22",
+    "apscheduler>=3.10.0,<4",
+    "beautifulsoup4>=4.12.0,<5",
+    "pypdf>=4.0.0,<5",
+    "watchdog>=4.0.0,<5",
+]
+
+[project.scripts]
+veni = "veni.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["veni*"]
+
+[tool.setuptools.package-data]
+"veni" = [
+    "templates/*.html",
+    "skills/builtins/**/*.md",
+    "personas/builtins/**/*.yaml",
+    "modes/builtins/**/*.yaml",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+skip-string-normalization = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["I", "E", "W", "F", "C", "Q"]
+ignore = [
+    "C901",
+    "E501",
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+]
+
+[tool.coverage.run]
+source = ["veni"]
+omit = [
+    "veni/providers/*",
+    "veni/commands/*",
+    "veni/tools/*",
+    "veni/gateways/*",
+    "veni/templates/*",
+    "veni/skills/builtins/*",
+    "veni/personas/builtins/*",
+    "veni/modes/builtins/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 70
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "except ImportError:",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "veni/skills", "veni/personas", "veni/modes"]
+skips = ["B101", "B301", "B403", "B404", "B603", "B607"]

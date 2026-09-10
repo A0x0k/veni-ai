@@ -1,0 +1,104 @@
+# =============================================================================
+# Veni AI — .gitignore
+# =============================================================================
+
+# --- Python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Virtual Environments ----------------------------------------------------
+venv/
+ENV/
+env/
+.venv/
+
+# --- Testing ----------------------------------------------------------------
+.pytest_cache/
+.pytest_cache_local/
+.pytest_temp/
+.pytest_tmp/
+temp_pytest_runtime/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.ruff_cache/
+
+# --- IDE / Editors -----------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-*
+.project
+.settings/
+
+# --- OS ---------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# --- Environment & Secrets ---------------------------------------------------
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+
+# --- Logs -------------------------------------------------------------------
+*.log
+logs/
+
+# --- Veni AI specific -------------------------------------------------------
+.veni-chatbot/
+*.session
+autosave*.json
+
+# --- Documentation build ----------------------------------------------------
+docs/_build/
+
+# --- AI / Model artifacts ---------------------------------------------------
+*.bin
+*.gguf
+*.onnx
+models/
+
+# --- CI / CD ----------------------------------------------------------------
+.github/workflows/*.log
+
+# --- Cache directories ------------------------------------------------------
+.mypy_cache/
+
+# --- MCP server config (contains API keys) -----------------------------------
+mcp_servers.json
+
+# --- Large artifacts ---------------------------------------------------------
+ki-relas.json

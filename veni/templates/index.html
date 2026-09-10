@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ bot_name }} | Web Chat & Live Canvas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #030712; color: #f8fafc; }
+        .gradient-text { background: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .scroll-hide::-webkit-scrollbar { display: none; }
+        .message-bubble { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4 md:p-8">
+    <!-- Header -->
+    <header class="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-center mb-8 gap-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <i class="fas fa-robot text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold gradient-text">{{ bot_name }} Web Chat</h1>
+                <p class="text-slate-400 text-sm">Interactive AI Workspace</p>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <div class="glass px-4 py-2 rounded-lg flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-sm font-medium">{{ status }}</span>
+            </div>
+            <div class="glass px-4 py-2 rounded-lg text-sm hidden md:block">
+                <span class="text-slate-400">Model:</span> {{ model }}
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto w-full flex-1 grid grid-cols-1 lg:grid-cols-4 gap-8 overflow-hidden">
+        <!-- Left: Chat Interface -->
+        <section class="lg:col-span-3 flex flex-col gap-4 overflow-hidden h-[75vh]">
+            <div class="glass rounded-2xl p-4 flex-1 flex flex-col overflow-hidden relative">
+                <!-- Messages -->
+                <div id="chat-container" class="flex-1 overflow-y-auto pr-2 space-y-6 scroll-hide">
+                    {% for msg in history %}
+                    <div class="flex {{ 'justify-end' if msg.role == 'user' else 'justify-start' }} message-bubble">
+                        <div class="max-w-[85%] rounded-2xl p-4 {{ 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/10' if msg.role == 'user' else 'bg-slate-800 text-slate-200 border border-slate-700' }}">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[10px] opacity-60 uppercase font-bold tracking-wider">{{ msg.role }}</span>
+                                {% if msg.role != 'user' %}<i class="fas fa-sparkles text-[10px] text-indigo-400"></i>{% endif %}
+                            </div>
+                            <div class="text-sm leading-relaxed whitespace-pre-wrap">{{ msg.content }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Thinking Indicator -->
+                <div id="thinking" class="hidden absolute bottom-24 left-6 flex items-center gap-2 text-slate-400 text-xs italic bg-slate-900/80 px-3 py-1 rounded-full border border-slate-700">
+                    <i class="fas fa-circle-notch fa-spin"></i> Veni is typing...
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="glass rounded-2xl p-2 flex items-center gap-2 border-t border-slate-800">
+                <input type="text" id="user-input" 
+                       placeholder="Type your message or command here..." 
+                       class="flex-1 bg-transparent border-none focus:ring-0 text-slate-200 placeholder-slate-500 px-4 py-3 text-sm">
+                <button id="send-btn" 
+                        class="bg-indigo-600 hover:bg-indigo-500 transition-colors px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-indigo-500/20">
+                    <span>Send</span>
+                    <i class="fas fa-paper-plane text-xs"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Right: Status Panel -->
+        <aside class="flex flex-col gap-6 h-[75vh]">
+            <!-- Quick Info -->
+            <div class="glass rounded-2xl p-6">
+                <h3 class="font-semibold mb-4 text-sm flex items-center gap-2">
+                    <i class="fas fa-brain text-pink-400"></i> Context Awareness
+                </h3>
+                <div id="memory-stats" class="space-y-4">
+                    <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Semantic Memories</div>
+                        <div id="stat-memories" class="text-xl font-bold text-indigo-400">--</div>
+                    </div>
+                    <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">User Preferences</div>
+                        <div id="stat-prefs" class="text-xl font-bold text-emerald-400">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Jobs -->
+            <div class="glass rounded-2xl p-6 flex-1 overflow-y-auto scroll-hide">
+                <h3 class="font-semibold mb-4 text-sm flex items-center gap-2">
+                    <i class="fas fa-bolt text-amber-400"></i> Active Jobs
+                </h3>
+                <div id="scheduler-jobs" class="space-y-3">
+                    <p class="text-xs text-slate-500 italic">Connecting to scheduler...</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const thinking = document.getElementById('thinking');
+        const dashboardHeaders = {
+            'Content-Type': 'application/json',
+            'X-Veni-Token': '{{ dashboard_token }}'
+        };
+        let messageCount = chatContainer.childElementCount;
+
+        // Auto-scroll to bottom
+        function scrollToBottom() {
+            chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+        }
+        scrollToBottom();
+
+        // Send Message
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            userInput.value = '';
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+            thinking.classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: dashboardHeaders,
+                    body: JSON.stringify({ message })
+                });
+                
+                if (!response.ok) throw new Error('Failed to send');
+                
+                // Message is being processed in background
+            } catch (e) {
+                alert("Error: " + e.message);
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                thinking.classList.add('hidden');
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+        // Real-time updates
+        async function updateDashboard() {
+            try {
+                const [statusRes, historyRes] = await Promise.all([
+                    fetch('/api/status', { headers: dashboardHeaders }),
+                    fetch('/api/history', { headers: dashboardHeaders })
+                ]);
+                
+                const status = await statusRes.json();
+                const history = await historyRes.json();
+
+                // Update Stats
+                document.getElementById('stat-memories').innerText = status.memory_stats.semantic_memories;
+                document.getElementById('stat-prefs').innerText = status.memory_stats.preferences;
+
+                // Update Jobs
+                const jobContainer = document.getElementById('scheduler-jobs');
+                jobContainer.innerHTML = status.scheduler_jobs.map(job => `
+                    <div class="p-3 bg-slate-900/50 rounded-lg border border-slate-800">
+                        <div class="text-[10px] font-bold text-indigo-400 uppercase mb-1">${job.id}</div>
+                        <div class="text-[9px] text-slate-500">Next run: ${new Date(job.next_run).toLocaleTimeString()}</div>
+                    </div>
+                `).join('');
+
+                // Check for new messages
+                if (history.length > messageCount) {
+                    // Update the list manually or reload
+                    // For now, let's append new messages via JS for smoothness
+                    const newMessages = history.slice(messageCount);
+                    newMessages.forEach(msg => {
+                        const div = document.createElement('div');
+                        div.className = `flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} message-bubble`;
+                        div.innerHTML = `
+                            <div class="max-w-[85%] rounded-2xl p-4 ${msg.role === 'user' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/10' : 'bg-slate-800 text-slate-200 border border-slate-700'}">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-[10px] opacity-60 uppercase font-bold tracking-wider">${msg.role}</span>
+                                </div>
+                                <div class="text-sm leading-relaxed whitespace-pre-wrap">${msg.content}</div>
+                            </div>
+                        `;
+                        chatContainer.appendChild(div);
+                    });
+                    messageCount = history.length;
+                    scrollToBottom();
+                    
+                    // Reactivate input if assistant replied
+                    if (history[history.length-1].role === 'assistant') {
+                        userInput.disabled = false;
+                        sendBtn.disabled = false;
+                        thinking.classList.add('hidden');
+                        userInput.focus();
+                    }
+                }
+            } catch (e) {
+                console.error("Update failed", e);
+            }
+        }
+
+        setInterval(updateDashboard, 2000);
+        updateDashboard();
+    </script>
+</body>
+</html>

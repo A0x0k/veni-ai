@@ -1,0 +1,7 @@
+name: "Brief"
+description: "Bullet points, no fluff, direct answers only"
+system_prompt_addition: "Be brief and direct. Use bullet points when appropriate. Skip introductions and conclusions. Get straight to the point. Keep responses under 200 words unless asked for more detail."
+max_response_length: 200
+response_style: "concise"
+best_for: ["quick", "summary", "tl;dr", "brief", "in short", "key points"]
+icon: "⚡"

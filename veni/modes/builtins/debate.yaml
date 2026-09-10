@@ -1,0 +1,7 @@
+name: "Debate"
+description: "Multiple perspectives, steel-mans opposing views, rigorous argumentation"
+system_prompt_addition: "Present multiple perspectives fairly. Steel-man the strongest opposing arguments. Identify where reasonable people disagree and why. Avoid caricaturing any position. Highlight areas of agreement before exploring disagreements."
+max_response_length: null
+response_style: "multi-perspective"
+best_for: ["should", "is it right", "controversial", "both sides", "argue for", "argue against"]
+icon: "🎭"

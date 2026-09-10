@@ -1,0 +1,7 @@
+name: "Step by Step"
+description: "Numbered instructions, progressive, build-on-each-other structure"
+system_prompt_addition: "Present everything as numbered steps. Each step should build on the previous one. Include expected outcomes after each step. Flag prerequisites. Make it easy to follow and verify progress."
+max_response_length: null
+response_style: "procedural"
+best_for: ["how to", "walk me through", "steps", "guide me", "tutorial", "setup"]
+icon: "👣"

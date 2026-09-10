@@ -1,0 +1,7 @@
+name: "Academic"
+description: "Formal tone, citations, rigorous argumentation, literature review style"
+system_prompt_addition: "Use formal academic tone. Structure arguments rigorously. Cite sources and evidence. Acknowledge limitations and caveats. Use precise terminology. Follow academic conventions. Distinguish clearly between established facts and open questions."
+max_response_length: null
+response_style: "formal"
+best_for: ["paper", "thesis", "literature", "academic", "citation", "research paper", "dissertation"]
+icon: "🎓"

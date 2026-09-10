@@ -1,0 +1,7 @@
+name: "Structured"
+description: "Tables, frameworks, templates, and organized formats"
+system_prompt_addition: "Always use structured formats — tables, frameworks, templates, and lists. Organize information hierarchically. Use headings and subheadings. Provide fill-in-the-blank templates where applicable. Make everything scannable and actionable."
+max_response_length: null
+response_style: "structured"
+best_for: ["framework", "template", "table", "structure", "organize", "plan", "matrix"]
+icon: "📋"
